@@ -42,8 +42,8 @@ public class Card {
 	public String toString() {
 		return rank + " of " + suit;
 	}
-	public int getValueOfCard(Card card) {
-		int cardValue = card.rank.getValue();
+	public int getValueOfCard() {
+		int cardValue = this.rank.getValue();
 		
 		return cardValue;
 	}
