@@ -1,4 +1,4 @@
-package com.skilldistillery.cards.common;
+package com.skillsdistillery.blackjack;
 
 public class BlackjackApp {
 	BlackjackImpl bji = new BlackjackImpl();

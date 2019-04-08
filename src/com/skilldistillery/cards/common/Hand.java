@@ -6,7 +6,6 @@ import java.util.List;
 public class Hand {
 	private List<Card> hand = new ArrayList<>();
 
-
 	public Hand() {
 
 	}
@@ -15,7 +14,7 @@ public class Hand {
 		int handTotal = 0;
 		for (Card card : hand) {
 			handTotal += card.getValueOfCard();
-			
+
 		}
 
 		return handTotal;
@@ -25,15 +24,10 @@ public class Hand {
 
 	}
 
-//	public void clearHand() {
-//		for (int i = 0; i < dealerHand.size(); i++) {
-//			dealerHand.remove(0);
-//		}
-//		for (int i = 0; i < playersHand.size(); i++) {
-//			playersHand.remove(0);
-//		}
-//
-//	}
+	public void clearHand() {
+	hand = new ArrayList<>();
+
+	}
 
 	public List<Card> getCards() {
 		return hand;
