@@ -9,10 +9,10 @@ import com.skilldistillery.cards.common.Hand;
 import com.skilldistillery.cards.common.Player;
 
 public class BlackjackImpl {
-	Hand hand;
-	Deck deck;
-	Player player;
-	Dealer dealer;
+	private Hand hand;
+	private Deck deck;
+	private Player player;
+	private Dealer dealer;
 	public Scanner kb = new Scanner(System.in);
 
 	public void launch() {
@@ -50,48 +50,39 @@ public class BlackjackImpl {
 
 	public void playHand() {
 		boolean gamePwr = true;
-		int playerHandValue = 0;
-		int dealerHandValue = 0;
 		Card cardDealt = null;
-		do {
+		while (gamePwr) {
 
 			deck.addCardsToDeck();
 			deck.checkDeckSize();
 			deck.shuffleCards();
 			for (int i = 0; i < 2; i++) {
-				cardDealt = deck.dealCard(1);
+				cardDealt = deck.dealCard();
 				player.addCardtoHand(cardDealt);
 			}
-			if (player.getHand().getHandValue() == 21) {
-				System.out.println("You win!");
-				System.out.println("Would you like to play again(y/n)?");
-				String choice = kb.next();
-				player.getHand().clearHand();
-				dealer.getHand().clearHand();
-				if (choice.equalsIgnoreCase("n")) {
-					System.out.println("Bye");
-					gamePwr = false;
-				}
-			}
+			player.displayHand();
 			for (int i = 0; i < 2; i++) {
-				cardDealt = deck.dealCard(1);
+				cardDealt = deck.dealCard();
 				dealer.addCardtoHand(cardDealt);
 			}
-			if (dealer.getHand().getHandValue() == 21) {
-				System.out.println("Dealer wins");
-				System.out.println("Would you like to play again(y/n)?");
-				String choice = kb.next();
-				player.getHand().clearHand();
-				dealer.getHand().clearHand();
-				if (choice.equalsIgnoreCase("n")) {
-					System.out.println("Bye");
-					gamePwr = false;
+			dealer.displayHand();
+			do {
+
+				if (player.getHand().getHandValue() == 21 || dealer.getHand().getHandValue() == 21) {
+//					player.displayHand();
+//					dealer.displayHand();
+					checkForWin(player.getHand().getHandValue(), dealer.getHand().getHandValue());
+					break;
 				}
-			}
-			playerHandValue = playersHand();
-			dealerHandValue = dealersHand();
-			String winStatus = checkForWin(playerHandValue, dealerHandValue);
-			System.out.println(winStatus);
+				playersHand();
+				if (player.getHand().getHandValue() > 21) {
+					break;
+				}
+				dealersHand();
+				checkForWin(player.getHand().getHandValue(), dealer.getHand().getHandValue());
+
+				break;
+			} while (true);
 
 			System.out.println("Would you like to play again(y/n)?");
 			String choice = kb.next();
@@ -102,21 +93,22 @@ public class BlackjackImpl {
 				gamePwr = false;
 			}
 
-		} while (gamePwr);
+		}
+		while (true)
+			;
+
 	}
 
 	public int playersHand() {
 		boolean game = true;
 		String playerChoice = "";
 
-		player.displayHand();
-		dealer.displayHand();
 		do {
 			System.out.println("Would you like to hit or stand (H/S)?");
 			playerChoice = kb.next();
 
 			if (playerChoice.equalsIgnoreCase("H")) {
-				player.addCardtoHand(deck.dealCard(1));
+				player.addCardtoHand(deck.dealCard());
 				player.displayHand();
 			} else if (playerChoice.equalsIgnoreCase("s")) {
 
@@ -142,7 +134,7 @@ public class BlackjackImpl {
 			dealer.displayHiddenHand();
 			if (dealer.getHand().getHandValue() < 17) {
 				System.out.println("Dealer will hit.");
-				dealer.addCardtoHand(deck.dealCard(1));
+				dealer.addCardtoHand(deck.dealCard());
 				dealer.displayHiddenHand();
 			}
 			if (dealer.getHand().getHandValue() > 21) {
@@ -159,20 +151,16 @@ public class BlackjackImpl {
 		return dealer.getHand().getHandValue();
 	}
 
-	public String checkForWin(int playerHand, int dealerHand) {
-		if (playerHand > 21) {
-			playerHand = 0;
-		}
+	public void checkForWin(int playerHand, int dealerHand) {
 		if (dealerHand > 21) {
 			dealerHand = 0;
 		}
 		if (playerHand > dealerHand) {
-			return "You win";
+			System.out.println("You win");
 		} else if (playerHand < dealerHand) {
-			return "You lose";
+			System.out.println("You lose");
 		} else if (playerHand == dealerHand) {
-			return "It's a push.";
+			System.out.println("It's a push.");
 		}
-		return "";
 	}
 }
